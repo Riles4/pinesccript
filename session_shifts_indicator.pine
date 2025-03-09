@@ -10,25 +10,22 @@ asiaStyle = input.string("solid", "Asia Session Line Style", options=["solid", "
 londonStyle = input.string("solid", "London Session Line Style", options=["solid", "dashed"], group="Line Styles")
 nyAmStyle = input.string("solid", "NY AM Session Line Style", options=["solid", "dashed"], group="Line Styles")
 nyMidStyle = input.string("solid", "NY Mid Session Line Style", options=["solid", "dashed"], group="Line Styles")
-newCycleStyle = input.string("solid", "New Cycle Line Style", options=["solid", "dashed"], group="Line Styles")
 
 // Function to convert line style string to line style value
 getLineStyle(style) =>
     style == "solid" ? line.style_solid : line.style_dashed
 
-// Time conditions for each session
-isAsiaOpen = hour == 19  // 7:00 PM
-isLondonOpen = hour == 1 // 1:00 AM
-isNYAMOpen = hour == 7   // 7:00 AM
-isNYMidOpen = hour == 13 // 1:00 PM
-isNewCycle = hour == 19  // 7:00 PM
+// Time conditions for each session - using exact hour matches
+isAsiaOpen = hour == 19 and minute == 0  // 7:00 PM
+isLondonOpen = hour == 1 and minute == 0  // 1:00 AM
+isNYAMOpen = hour == 7 and minute == 0   // 7:00 AM
+isNYMidOpen = hour == 13 and minute == 0  // 1:00 PM
 
 // Colors with 75% opacity (25% transparency)
 asiaColor = color.new(color.blue, 25)
 londonColor = color.new(color.red, 25)
 nyAMColor = color.new(color.green, 25)
 nyMidColor = color.new(color.orange, 25)
-newCycleColor = color.new(color.purple, 25)
 
 // Draw vertical lines for each session
 if showIndicator
@@ -47,7 +44,3 @@ if showIndicator
     if isNYMidOpen and (showHistorical or time >= timenow)
         line.new(bar_index, low - (high - low), bar_index, high + (high - low), 
              color=nyMidColor, width=1, style=getLineStyle(nyMidStyle))
-    
-    if isNewCycle and (showHistorical or time >= timenow)
-        line.new(bar_index, low - (high - low), bar_index, high + (high - low), 
-             color=newCycleColor, width=1, style=getLineStyle(newCycleStyle))
